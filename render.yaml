@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: hand-tracking-python
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -w 1 -b 0.0.0.0:5001 app:app"
+    envVars:
+      - key: PORT
+        value: 5001
