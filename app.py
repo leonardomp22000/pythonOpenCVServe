@@ -7,7 +7,7 @@ import mediapipe as mp
 app = Flask(__name__)
 
 mpHands = mp.solutions.hands
-hands = mpHands.Hands()
+hands = mpHands.Hands(static_image_mode=True)
 mpDraw = mp.solutions.drawing_utils
 
 @app.route("/process", methods=["POST"])
