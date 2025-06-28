@@ -7,9 +7,10 @@ import mediapipe as mp
 app = Flask(__name__)
 
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(static_image_mode=True)
 mpDraw = mp.solutions.drawing_utils
+hands = mpHands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.7)
 
+# Activar virtual environment . venv/bin/activate
 @app.route("/process", methods=["POST"])
 def process_image():
     try:
@@ -26,7 +27,7 @@ def process_image():
 
         # Procesamiento de la imagen
         imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = hands.process(imgRGB)
+        results = hands.process(imgRGB)  # Elimina el argumento timestamp
 
         if results.multi_hand_landmarks:
             for handLms in results.multi_hand_landmarks:
@@ -39,6 +40,7 @@ def process_image():
         return jsonify({"processed_frame": f"data:image/jpeg;base64,{processed_img}"})
     
     except Exception as e:
+        print(f"Error en el servidor: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
